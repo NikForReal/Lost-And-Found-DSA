@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lost & Found | Campus Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <div class="header-inner">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🔎
+                </div>
+
+                <div>
+                    <h1>Lost & Found</h1>
+
+                    <p>
+                        Campus Item Management System
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="header-badge">
+                DSA PROJECT
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="container">
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section class="dashboard">
+
+
+            <div class="stat-card total-card">
+
+                <div class="stat-icon">
+                    📦
+                </div>
+
+                <div>
+                    <span>Total Items</span>
+
+                    <strong id="totalCount">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card lost-card">
+
+                <div class="stat-icon">
+                    🔴
+                </div>
+
+                <div>
+                    <span>Lost Items</span>
+
+                    <strong id="lostCount">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card found-card">
+
+                <div class="stat-icon">
+                    🟢
+                </div>
+
+                <div>
+                    <span>Found Items</span>
+
+                    <strong id="foundCount">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card returned-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div>
+                    <span>Returned</span>
+
+                    <strong id="returnedCount">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================= ACTIONS ================= -->
+
+        <section class="actions">
+
+            <button
+                class="action-btn lost-action"
+                onclick="openForm('Lost')">
+
+                + Report Lost Item
+
+            </button>
+
+
+            <button
+                class="action-btn found-action"
+                onclick="openForm('Found')">
+
+                + Report Found Item
+
+            </button>
+
+        </section>
+
+
+
+        <!-- ================= SEARCH ================= -->
+
+        <section class="panel search-panel">
+
+            <div class="panel-title">
+
+                <h2>
+                    🔍 Search Items
+                </h2>
+
+                <p>
+                    Search by name, category, location,
+                    reporter or contact
+                </p>
+
+            </div>
+
+
+            <div class="search-row">
+
+                <div class="search-input-wrapper">
+
+                    <span>⌕</span>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search for an item..."
+                        onkeyup="searchItem()"
+                    >
+
+                </div>
+
+
+                <button
+                    class="primary-btn"
+                    onclick="searchItem()">
+
+                    Search
+
+                </button>
+
+
+                <button
+                    class="secondary-btn"
+                    onclick="clearSearch()">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= SEARCH RESULTS ================= -->
+
+        <section
+            id="searchResultsSection"
+            class="panel hidden">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        🔎 Search Results
+                    </h2>
+
+                    <p>
+                        Matching items found
+                    </p>
+
+                </div>
+
+
+                <span
+                    id="searchBadge"
+                    class="count-badge blue-badge">
+
+                    0
+
+                </span>
+
+            </div>
+
+
+            <div
+                id="searchResults"
+                class="items-grid">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= FILTER + SORT ================= -->
+
+        <section
+            class="panel controls-panel">
+
+            <div class="control-group">
+
+                <label>
+                    Show
+                </label>
+
+
+                <div class="filter-buttons">
+
+                    <button
+                        class="filter-btn active"
+                        data-filter="All"
+                        onclick="setFilter('All')">
+
+                        All
+
+                    </button>
+
+
+                    <button
+                        class="filter-btn"
+                        data-filter="Lost"
+                        onclick="setFilter('Lost')">
+
+                        🔴 Lost
+
+                    </button>
+
+
+                    <button
+                        class="filter-btn"
+                        data-filter="Found"
+                        onclick="setFilter('Found')">
+
+                        🟢 Found
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="control-group">
+
+                <label>
+                    Sort by Date
+                </label>
+
+
+                <select
+                    id="sortSelect"
+                    onchange="changeSort(this.value)">
+
+                    <option value="newest">
+                        Newest First
+                    </option>
+
+                    <option value="oldest">
+                        Oldest First
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= FORM ================= -->
+
+        <section
+            id="formSection"
+            class="panel form-panel hidden">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2 id="formTitle">
+                        Report Item
+                    </h2>
+
+                    <p>
+                        Add information about the item
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="icon-btn"
+                    onclick="closeForm()">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+
+            <form id="itemForm">
+
+
+                <div class="form-grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Item Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="itemName"
+                            placeholder="e.g. Black Wallet"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Category *
+                        </label>
+
+                        <select
+                            id="category"
+                            required>
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option>
+                                Electronics
+                            </option>
+
+                            <option>
+                                Accessories
+                            </option>
+
+                            <option>
+                                Documents
+                            </option>
+
+                            <option>
+                                Books
+                            </option>
+
+                            <option>
+                                Bags
+                            </option>
+
+                            <option>
+                                Keys
+                            </option>
+
+                            <option>
+                                Clothing
+                            </option>
+
+                            <option>
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Location *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            placeholder="e.g. Library"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Reported By *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="reportedBy"
+                            placeholder="Your Name"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Contact Number *
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="contact"
+                            placeholder="10 digit mobile number"
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Date *
+                        </label>
+
+                        <input
+                            type="date"
+                            id="date"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Description *
+                    </label>
+
+                    <textarea
+                        id="description"
+                        placeholder="Describe the item..."
+                        required>
+                    </textarea>
+
+                </div>
+
+
+
+                <div class="form-buttons">
+
+                    <button
+                        type="submit"
+                        class="primary-btn">
+
+                        <span id="submitText">
+                            ➕ Add Item
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        onclick="closeForm()">
+
+                        Cancel
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ================= ITEMS ================= -->
+
+        <section
+            id="itemsSection"
+            class="panel">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2 id="itemsTitle">
+                        📋 All Items
+                    </h2>
+
+                    <p id="itemsSubtitle">
+                        All reported lost and found items
+                    </p>
+
+                </div>
+
+
+                <span
+                    id="itemsBadge"
+                    class="count-badge">
+
+                    0
+
+                </span>
+
+            </div>
+
+
+            <div
+                id="itemsContainer"
+                class="items-grid">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= DSA SECTION ================= -->
+
+        <section class="panel dsa-section">
+
+
+            <div class="dsa-top">
+
+                <span class="dsa-label">
+                    DATA STRUCTURES & ALGORITHMS
+                </span>
+
+
+                <h2>
+                    🧠 How DSA Powers This System
+                </h2>
+
+
+                <p>
+                    Core DSA concepts used to manage,
+                    search and organize lost & found records.
+                </p>
+
+            </div>
+
+
+
+            <!-- DSA FLOW -->
+
+            <div class="dsa-flow">
+
+
+                <div class="dsa-step active">
+
+                    <div class="step-number">
+                        01
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Linked List
+                        </h3>
+
+                        <p>
+                            Stores item records dynamically.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="flow-arrow">
+                    →
+                </div>
+
+
+
+                <div class="dsa-step">
+
+                    <div class="step-number">
+                        02
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Searching
+                        </h3>
+
+                        <p>
+                            Finds items by matching details.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="flow-arrow">
+                    →
+                </div>
+
+
+
+                <div class="dsa-step">
+
+                    <div class="step-number">
+                        03
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Sorting
+                        </h3>
+
+                        <p>
+                            Arranges items by reported date.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="flow-arrow">
+                    →
+                </div>
+
+
+
+                <div class="dsa-step">
+
+                    <div class="step-number">
+                        04
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Deletion
+                        </h3>
+
+                        <p>
+                            Removes an item node when deleted.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- LINKED LIST -->
+
+            <div class="linked-list-box">
+
+
+                <div class="linked-list-title">
+
+                    <div>
+
+                        <h3>
+                            🔗 Current Linked List
+                        </h3>
+
+                        <p>
+                            Each item is represented as a node.
+                        </p>
+
+                    </div>
+
+
+                    <span class="complexity-tag">
+                        Traversal: O(n)
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="linkedListVisual"
+                    class="nodes-container">
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- COMPLEXITY -->
+
+            <div class="complexity-row">
+
+
+                <div>
+
+                    <span>
+                        Insert
+                    </span>
+
+                    <strong>
+                        O(n)
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Search
+                    </span>
+
+                    <strong>
+                        O(n)
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Sort
+                    </span>
+
+                    <strong>
+                        O(n log n)
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Delete
+                    </span>
+
+                    <strong>
+                        O(n)
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <strong>
+            Lost & Found Management System
+        </strong>
+
+        <span>
+            DSA Project • Linked List • Searching • Sorting
+        </span>
+
+    </footer>
+
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
